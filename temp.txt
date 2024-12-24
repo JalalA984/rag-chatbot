@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { DataAPIClient } from "@datastax/astra-db-ts";
-import { GoogleGenerativeAI  } from "@google/generative-ai";
+import { OpenAI } from "openai";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { PuppeteerWebBaseLoader } from "@langchain/community/document_loaders/web/puppeteer";
 
@@ -20,7 +20,7 @@ const openai = new OpenAI({
     baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/"
 });
 */
-const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "text-embedding-004"});
 
 const chatbotData = [
