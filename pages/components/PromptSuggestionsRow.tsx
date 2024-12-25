@@ -1,20 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 
 const PromptSuggestionsRow = ({ onPromptClick }) => {
+  const [showSuggestions, setShowSuggestions] = useState(true); // State to control visibility
+
   const prompts = [
     "What are the latest tech trends?",
     "How to build a secure app?",
-    "Explain machine learning algorithms",
-    "What are the skills needed for a data scientist?",
+    "What skills are required for data science?",
   ];
 
+  const handlePromptClick = (prompt) => {
+    onPromptClick(prompt);
+    setShowSuggestions(false); // Hide suggestions after a prompt is clicked
+  };
+
   return (
-    <div className="flex gap-4">
+    <div
+      className={`flex flex-wrap gap-4 mt-4 ${showSuggestions ? "" : "hidden"}`}
+    >
       {prompts.map((prompt, index) => (
         <button
           key={index}
-          className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition"
-          onClick={() => onPromptClick(prompt)} // Ensure onPromptClick is being passed and called correctly
+          className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition w-full sm:w-auto"
+          onClick={() => handlePromptClick(prompt)}
         >
           {prompt}
         </button>

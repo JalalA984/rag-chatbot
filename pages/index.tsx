@@ -19,14 +19,14 @@ export default function Home() {
       className={`${geistSans.variable} ${geistMono.variable} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
     >
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          src={SupernovaImage}
-          alt="DevHorizon Nova logo"
-          width={260}
-          height={120}
-          priority
-          className="transition-transform duration-500 hover:scale-110 hover:rotate-6 hover:opacity-90"
-        />
+        <Link href="/">
+          <Image
+            src={SupernovaImage}
+            alt="DevHorizon Nova logo"
+            width={240}
+            className="mb-4 transition-transform duration-500 hover:scale-110 hover:rotate-6 hover:opacity-90"
+          />
+        </Link>
         <h1 className="text-2xl font-bold">Welcome to DevHorizon Nova</h1>
         <p className="text-center sm:text-left text-lg">
           DevHorizon Nova is a state-of-the-art RAG (Retrieval-Augmented

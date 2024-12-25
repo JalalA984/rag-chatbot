@@ -21,27 +21,31 @@ const LearnMore = () => {
     >
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         {/* Header Section */}
-        <Image
-          src={SupernovaImage}
-          alt="DevHorizon Nova logo"
-          width={260}
-          height={120}
-          priority
-          className="transition-transform duration-500 hover:scale-110 hover:rotate-6 hover:opacity-90"
-        />
-        <h1 className="text-3xl font-bold text-center sm:text-left">Learn More</h1>
+        <Link href="/">
+          <Image
+            src={SupernovaImage}
+            alt="DevHorizon Nova logo"
+            width={240}
+            className="mb-4 transition-transform duration-500 hover:scale-110 hover:rotate-6 hover:opacity-90"
+          />
+        </Link>
+        <h1 className="text-3xl font-bold text-center sm:text-left">
+          Learn More
+        </h1>
         <p className="text-center sm:text-left text-lg text-gray-400">
-          Explore the technology and ideas behind DevHorizon Nova, a RAG-powered chatbot 
-          designed to help aspiring tech professionals.
+          Explore the technology and ideas behind DevHorizon Nova, a RAG-powered
+          chatbot designed to help aspiring tech professionals.
         </p>
 
         {/* Section: What is RAG */}
         <section className="max-w-3xl">
           <h2 className="text-2xl font-semibold mb-4">What is RAG?</h2>
           <p className="text-gray-400 leading-relaxed">
-            Retrieval-Augmented Generation (RAG) is an innovative AI framework that combines large language 
-            models (LLMs) with external data retrieval systems. By retrieving context from knowledge bases in 
-            real time, RAG improves the relevance, accuracy, and depth of AI responses.
+            Retrieval-Augmented Generation (RAG) is an innovative AI framework
+            that combines large language models (LLMs) with external data
+            retrieval systems. By retrieving context from knowledge bases in
+            real time, RAG improves the relevance, accuracy, and depth of AI
+            responses.
           </p>
         </section>
 
@@ -49,9 +53,11 @@ const LearnMore = () => {
         <section className="max-w-3xl">
           <h2 className="text-2xl font-semibold mb-4">About This Project</h2>
           <p className="text-gray-400 leading-relaxed">
-            DevHorizon Nova is built for computer science students and tech enthusiasts. It provides insights 
-            into tech stacks, companies, and required technical skills, empowering users to achieve their 
-            career goals. With Nova, you’ll find answers that are fast, accurate, and actionable.
+            DevHorizon Nova is built for computer science students and tech
+            enthusiasts. It provides insights into tech stacks, companies, and
+            required technical skills, empowering users to achieve their career
+            goals. With Nova, you’ll find answers that are fast, accurate, and
+            actionable.
           </p>
         </section>
 
@@ -60,16 +66,20 @@ const LearnMore = () => {
           <h2 className="text-2xl font-semibold mb-4">Technologies Used</h2>
           <ul className="text-gray-400 leading-relaxed list-disc list-inside space-y-2">
             <li>
-              <strong>LangChain:</strong> Enables seamless integration of LLMs and data sources for complex applications.
+              <strong>LangChain:</strong> Enables seamless integration of LLMs
+              and data sources for complex applications.
             </li>
             <li>
-              <strong>Gemini:</strong> A cutting-edge generative AI model offering advanced embeddings and conversational capabilities.
+              <strong>Gemini:</strong> A cutting-edge generative AI model
+              offering advanced embeddings and conversational capabilities.
             </li>
             <li>
-              <strong>Tailwind CSS:</strong> Provides rapid, utility-first styling for a clean and responsive UI.
+              <strong>Tailwind CSS:</strong> Provides rapid, utility-first
+              styling for a clean and responsive UI.
             </li>
             <li>
-              <strong>Next.js:</strong> Powers the frontend with efficient server-side rendering and routing.
+              <strong>Next.js:</strong> Powers the frontend with efficient
+              server-side rendering and routing.
             </li>
           </ul>
         </section>
