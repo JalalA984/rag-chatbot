@@ -8,14 +8,11 @@ import LoadingBubble from "./components/LoadingBubble";
 import Link from "next/link";
 
 const Chat = () => {
-  const {
-    append,
-    isLoading,
-    messages,
-    input,
-    handleInputChange,
-    handleSubmit,
-  } = useChat();
+  const { append, isLoading, messages, input, handleInputChange, handleSubmit } = useChat({
+    api: '/api/chat', // Adjust this to match your API route
+  });
+  
+  
 
   const [showSuggestions, setShowSuggestions] = useState(true); // State to control suggestions visibility
   const noMessages = !messages || messages.length === 0;
