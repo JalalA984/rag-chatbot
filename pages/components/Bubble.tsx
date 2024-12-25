@@ -1,17 +1,10 @@
-import React from 'react';
-
-const Bubble = ({ message }) => {
-  const { content, role } = message;
-
+// In your Bubble component file
+const Bubble = ({ message, isUser }) => {
   return (
-    <div
-      className={`w-full p-4 rounded-lg ${
-        role === "user"
-          ? "bg-blue-600 text-white self-end"
-          : "bg-gray-700 text-gray-300 self-start"
-      }`}
-    >
-      {content}
+    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
+      <div className={`max-w-3/4 p-3 rounded-lg ${isUser ? 'bg-blue-600' : 'bg-gray-700'}`}>
+        <p className="text-white">{message.content}</p>
+      </div>
     </div>
   );
 };

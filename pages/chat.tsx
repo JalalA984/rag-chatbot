@@ -1,6 +1,6 @@
 import Image from "next/image";
 import SupernovaImage from "@/public/supernova.svg";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Message, useChat } from "ai/react";
 import Bubble from "./components/Bubble";
 import PromptSuggestionsRow from "./components/PromptSuggestionsRow";
@@ -8,14 +8,22 @@ import LoadingBubble from "./components/LoadingBubble";
 import Link from "next/link";
 
 const Chat = () => {
-  const { append, isLoading, messages, input, handleInputChange, handleSubmit } = useChat({
-    api: '/api/chat', // Adjust this to match your API route
+  const { append, isLoading, messages, input, handleInputChange, handleSubmit, error } = useChat({
+    api: '/api/chat',
+    onResponse: (response) => {
+      console.log('Response received:', response);
+    },
+    onFinish: (message) => {
+      console.log('Message finished:', message);
+    },
   });
-  
-  
 
-  const [showSuggestions, setShowSuggestions] = useState(true); // State to control suggestions visibility
+  const [showSuggestions, setShowSuggestions] = useState(true);
   const noMessages = !messages || messages.length === 0;
+
+  useEffect(() => {
+    console.log('Messages updated:', messages);
+  }, [messages]);
 
   const handlePrompt = (promptText: string) => {
     const msg: Message = {
@@ -24,11 +32,11 @@ const Chat = () => {
       role: "user",
     };
     append(msg);
-    setShowSuggestions(false); // Hide suggestions when a prompt is selected
+    setShowSuggestions(false);
   };
 
   const handleUserInput = () => {
-    setShowSuggestions(false); // Hide suggestions when the user submits their own question
+    setShowSuggestions(false);
   };
 
   return (
@@ -63,7 +71,7 @@ const Chat = () => {
             </p>
           ) : (
             messages.map((message, index) => (
-              <Bubble key={index} message={message} />
+              <Bubble key={index} message={message} isUser={message.role === 'user'} />
             ))
           )}
         </div>
@@ -75,6 +83,9 @@ const Chat = () => {
           </div>
         )}
       </section>
+
+      {/* Error Display */}
+      {error && <p className="text-red-500 mt-4">Error: {error.message}</p>}
 
       {/* Prompt Suggestions Section */}
       {showSuggestions && <PromptSuggestionsRow onPromptClick={handlePrompt} />}
