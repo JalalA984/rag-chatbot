@@ -1,18 +1,18 @@
-/* LoadingBubble Styles */
+/* LoadingBubble.module.css */
 .loading-container {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  height: 28px; /* Adjusted size */
-  width: 28px;  /* Adjusted size */
+  height: 28px;
+  width: 28px;
   animation: rotate 1.2s linear infinite;
   background-color: #9b59b6;
   background-image: linear-gradient(#9b59b6, #84cdfa, #5ad1cd);
 }
 
-.loading-container span {
+.loading-span {
   position: absolute;
   border-radius: 50%;
   height: 100%;
@@ -21,19 +21,19 @@
   background-image: linear-gradient(#9b59b6, #84cdfa, #5ad1cd);
 }
 
-.loading-container span.blur-5 {
+.loading-span.blur-5 {
   filter: blur(5px);
 }
 
-.loading-container span.blur-10 {
+.loading-span.blur-10 {
   filter: blur(10px);
 }
 
-.loading-container span.blur-25 {
+.loading-span.blur-25 {
   filter: blur(25px);
 }
 
-.loading-container span.blur-50 {
+.loading-span.blur-50 {
   filter: blur(50px);
 }
 
@@ -51,10 +51,10 @@
 
 @keyframes rotate {
   from {
-      transform: translate(-50%, -50%) rotate(0deg);
+    transform: translate(-50%, -50%) rotate(0deg);
   }
 
   to {
-      transform: translate(-50%, -50%) rotate(360deg);
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
