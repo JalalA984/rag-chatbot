@@ -38,8 +38,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const embeddingResult = await embeddingModel.embedContent(latestMessage);
     const vector = Array.from(embeddingResult.embedding.values);
-    console.log('Embedding result:', embeddingResult);
-    console.log('Vector for search:', vector);
 
     try {
       const collection = await db.collection(ASTRA_DB_COLLECTION);
@@ -55,14 +53,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       );
 
       const documents = await cursor.toArray();
-      console.log('Documents fetched from DB:', documents);
 
       const docsMap = documents?.map((doc) => ({
         text: doc.text,
         similarity: doc.$similarity
       }));
       docContext = JSON.stringify(docsMap);
-      console.log('Document context:', docContext);
+
     } catch (err) {
       console.error("Error fetching context:", err);
       docContext = "";
@@ -93,15 +90,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     console.log('Starting to stream response...');
     
+    // Stream data as it arrives
     for await (const chunk of result.stream) {
-      const chunkText = chunk.text();
-      console.log('Streaming chunk:', chunkText);
-      res.write(`data: ${JSON.stringify({ text: chunkText })}\n\n`);
+      res.write(chunk.text());
     }
-
     res.end();
-    console.log('Response streaming ended.');
 
+    console.log('Response streaming ended.');
   } catch (err) {
     console.error('Error in chat API:', err);
     return res.status(500).json({ error: 'Internal server error' });

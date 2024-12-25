@@ -1,41 +1,82 @@
 import Image from "next/image";
 import SupernovaImage from "@/public/supernova.svg";
-import React, { useState, useEffect } from "react";
-import { Message, useChat } from "ai/react";
+import React, { useState } from "react";
 import Bubble from "./components/Bubble";
 import PromptSuggestionsRow from "./components/PromptSuggestionsRow";
 import LoadingBubble from "./components/LoadingBubble";
 import Link from "next/link";
 
 const Chat = () => {
-  const { append, isLoading, messages, input, handleInputChange, handleSubmit, error } = useChat({
-    api: '/api/chat',
-    onResponse: (response) => {
-      console.log('Response received:', response);
-    },
-    onFinish: (message) => {
-      console.log('Message finished:', message);
-    },
-  });
-
+  const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
-  const noMessages = !messages || messages.length === 0;
 
-  useEffect(() => {
-    console.log('Messages updated:', messages);
-  }, [messages]);
-
-  const handlePrompt = (promptText: string) => {
-    const msg: Message = {
-      id: crypto.randomUUID(),
-      content: promptText,
-      role: "user",
-    };
-    append(msg);
-    setShowSuggestions(false);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
   };
 
-  const handleUserInput = () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!input.trim()) return;
+
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { role: "user", content: input },
+    ]);
+    setInput("");
+    setIsLoading(true);
+    setShowSuggestions(false);
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: [
+            ...messages,
+            { role: "user", content: input },
+          ],
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get response from the server");
+      }
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let chunkText = "";
+
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          chunkText += decoder.decode(value, { stream: true });
+        }
+      }
+
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { role: "assistant", content: chunkText },
+      ]);
+    } catch (err) {
+      console.error("Error:", err);
+      setError("Something went wrong, please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePrompt = (promptText: string) => {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { role: "user", content: promptText },
+    ]);
     setShowSuggestions(false);
   };
 
@@ -61,17 +102,17 @@ const Chat = () => {
       <section className="relative w-full max-w-2xl flex flex-col flex-grow gap-4 p-6 rounded-lg shadow-md bg-gray-800 overflow-hidden">
         <div
           className={`flex flex-col gap-4 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 ${
-            noMessages ? "justify-center" : ""
+            messages.length === 0 ? "justify-center" : ""
           }`}
           style={{ maxHeight: "60vh" }}
         >
-          {noMessages ? (
+          {messages.length === 0 ? (
             <p className="text-gray-500 text-center w-full">
               Ask DevHorizon Nova about anything tech! We hope you enjoy!
             </p>
           ) : (
             messages.map((message, index) => (
-              <Bubble key={index} message={message} isUser={message.role === 'user'} />
+              <Bubble key={index} message={message} isUser={message.role === "user"} />
             ))
           )}
         </div>
@@ -85,18 +126,14 @@ const Chat = () => {
       </section>
 
       {/* Error Display */}
-      {error && <p className="text-red-500 mt-4">Error: {error.message}</p>}
+      {error && <p className="text-red-500 mt-4">{error}</p>}
 
       {/* Prompt Suggestions Section */}
       {showSuggestions && <PromptSuggestionsRow onPromptClick={handlePrompt} />}
 
       {/* Input Section */}
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleUserInput();
-          handleSubmit();
-        }}
+        onSubmit={handleSubmit}
         className="w-full max-w-2xl flex items-center mt-6 gap-4"
       >
         <input
