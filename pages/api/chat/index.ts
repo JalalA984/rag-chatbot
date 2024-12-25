@@ -90,15 +90,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     console.log('Starting to stream response...');
     
+    // Stream data as it arrives
     for await (const chunk of result.stream) {
-      const chunkText = chunk.text();
-      console.log(chunkText);
-      res.write(`data: ${JSON.stringify({ text: chunkText })}\n\n`);
+      res.write(chunk.text());
     }
-
     res.end();
-    console.log('Response streaming ended.');
 
+    console.log('Response streaming ended.');
   } catch (err) {
     console.error('Error in chat API:', err);
     return res.status(500).json({ error: 'Internal server error' });
